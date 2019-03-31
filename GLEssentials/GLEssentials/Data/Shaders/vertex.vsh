@@ -1,12 +1,18 @@
-//
-//  vertex.vsh
-//  GLEssentials-OSX
-//
-//  Created by newpolaris on 2019/03/30.
-//  Copyright © 2019 Dan Omachi. All rights reserved.
-//
 
-#include <metal_stdlib>
-using namespace metal;
+attribute vec4 Position;
+attribute vec4 SourceColor;
+attribute float UseTextureIn;
 
+varying vec4 DestinationColor;
 
+attribute vec2 TexCoordIn;
+varying vec2 TexCoordOut;
+
+varying float UseTextureOut;
+
+void main(void) {
+    DestinationColor = SourceColor;
+    gl_Position = Position;
+    TexCoordOut = TexCoordIn;
+    UseTextureOut = UseTextureIn;
+}

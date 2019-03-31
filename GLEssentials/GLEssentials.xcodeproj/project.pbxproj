@@ -45,6 +45,8 @@
 		3A622B961A899CF400A12489 /* GLEssentialsGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A622B711A899CDE00A12489 /* GLEssentialsGLView.m */; };
 		3A622B971A899CF400A12489 /* GLEssentialsWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A622B731A899CDE00A12489 /* GLEssentialsWindowController.m */; };
 		3A622B981A899E5000A12489 /* OpenGLRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A622B6C1A899CDE00A12489 /* OpenGLRenderer.m */; };
+		6650FA43224E7202005A114B /* vertex.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 6650FA42224E7202005A114B /* vertex.vsh */; };
+		6650FA45224E724B005A114B /* fragment.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 6650FA44224E724B005A114B /* fragment.fsh */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -92,6 +94,8 @@
 		3A622B7E1A899CDE00A12489 /* sourceUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sourceUtil.h; sourceTree = "<group>"; };
 		3A622B7F1A899CDE00A12489 /* vectorUtil.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = vectorUtil.c; sourceTree = "<group>"; };
 		3A622B801A899CDE00A12489 /* vectorUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vectorUtil.h; sourceTree = "<group>"; };
+		6650FA42224E7202005A114B /* vertex.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = vertex.vsh; sourceTree = "<group>"; };
+		6650FA44224E724B005A114B /* fragment.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = fragment.fsh; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -180,6 +184,8 @@
 				3A4CF8A01A89593700324DBF /* character.vsh */,
 				3A4CF8A11A89593700324DBF /* reflect.fsh */,
 				3A4CF8A21A89593700324DBF /* reflect.vsh */,
+				6650FA42224E7202005A114B /* vertex.vsh */,
+				6650FA44224E724B005A114B /* fragment.fsh */,
 			);
 			path = Shaders;
 			sourceTree = "<group>";
@@ -349,10 +355,12 @@
 				3A4CF9411A897DE100324DBF /* Main.storyboard in Resources */,
 				3A0574051A898095001A7683 /* demon.model in Resources */,
 				3A0574041A89808F001A7683 /* reflect.vsh in Resources */,
+				6650FA45224E724B005A114B /* fragment.fsh in Resources */,
 				3A0574021A89808F001A7683 /* character.vsh in Resources */,
 				3A4CF9421A897DE500324DBF /* Images.xcassets in Resources */,
 				3A0574031A89808F001A7683 /* reflect.fsh in Resources */,
 				3A0574011A89808F001A7683 /* character.fsh in Resources */,
+				6650FA43224E7202005A114B /* vertex.vsh in Resources */,
 				3A0574061A898095001A7683 /* demon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

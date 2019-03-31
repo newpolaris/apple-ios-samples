@@ -1,12 +1,16 @@
-//
-//  fragment.fsh
-//  GLEssentials-OSX
-//
-//  Created by newpolaris on 2019/03/30.
-//  Copyright © 2019 Dan Omachi. All rights reserved.
-//
+#version 120
 
-#include <metal_stdlib>
-using namespace metal;
+varying vec4 DestinationColor;
 
+varying vec2 TexCoordOut;
+uniform sampler2D Texture;
 
+varying float UseTextureOut;
+
+void main(void) {
+    if(UseTextureOut != 0.0)
+        gl_FragColor = texture2D(Texture, TexCoordOut);
+    else
+        gl_FragColor = DestinationColor;
+    
+}

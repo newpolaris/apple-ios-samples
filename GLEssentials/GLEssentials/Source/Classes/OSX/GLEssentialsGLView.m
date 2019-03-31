@@ -8,6 +8,7 @@
 
 #import "GLEssentialsGLView.h"
 #import "OpenGLRenderer.h"
+#import "sourceUtil.h"
 
 #define SUPPORT_RETINA_RESOLUTION 1
 
@@ -50,16 +51,18 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink,
 		NSOpenGLPFADoubleBuffer,
 		NSOpenGLPFADepthSize, 24,
 		// Must specify the 3.2 Core Profile to use OpenGL 3.2
-#if ESSENTIAL_GL_PRACTICES_SUPPORT_GL3 
+#if 1
 		NSOpenGLPFAOpenGLProfile,
-		NSOpenGLProfileVersion3_2Core,
+		NSOpenGLProfileVersionLegacy,
 #endif
 		0
 	};
 	
 	NSOpenGLPixelFormat *pf = [[NSOpenGLPixelFormat alloc] initWithAttributes:attrs];
-	
-	if (!pf)
+    GLint color;
+    [pf getValues:&color forAttribute:NSOpenGLPFAColorSize forVirtualScreen:0];
+    
+    if (!pf)
 	{
 		NSLog(@"No OpenGL pixel format");
 	}
@@ -131,7 +134,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink,
 	// thread (i.e. makeCurrentContext directs all OpenGL calls on this thread
 	// to [self openGLContext])
 	[[self openGLContext] makeCurrentContext];
-	
+
 	// Synchronize buffer swaps with vertical refresh rate
 	GLint swapInt = 1;
 	[[self openGLContext] setValues:&swapInt forParameter:NSOpenGLCPSwapInterval];
@@ -186,6 +189,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink,
                       AndHeight:viewRectPixels.size.height];
 	
 	CGLUnlockContext([[self openGLContext] CGLContextObj]);
+    
 }
 
 
@@ -222,7 +226,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink,
 	CGLLockContext([[self openGLContext] CGLContextObj]);
 
 	[_renderer render];
-
+    
 	CGLFlushDrawable([[self openGLContext] CGLContextObj]);
 	CGLUnlockContext([[self openGLContext] CGLContextObj]);
 }

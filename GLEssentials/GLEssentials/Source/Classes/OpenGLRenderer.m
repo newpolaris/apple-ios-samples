@@ -148,6 +148,8 @@ enum {
 	glViewport(0, 0, _viewWidth, _viewHeight);
 	
 #endif // RENDER_REFLECTION
+    
+    
 	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
@@ -690,8 +692,9 @@ static GLsizei GetGLTypeSize(GLenum type)
 	
 	// Prepend our vertex shader source string with the supported GLSL version so
 	//  the shader will work on ES, Legacy, and OpenGL 3.2 Core Profile contexts
-	sprintf(sourceString, "#version %d\n%s", version, vertexSource->string);
-			
+	//sprintf(sourceString, "#version %d\n%s", version, vertexSource->string);
+    sprintf(sourceString, "%s", vertexSource->string);
+    
 	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);	
 	glShaderSource(vertexShader, 1, (const GLchar **)&(sourceString), NULL);
 	glCompileShader(vertexShader);
@@ -731,8 +734,9 @@ static GLsizei GetGLTypeSize(GLenum type)
 	
 	// Prepend our fragment shader source string with the supported GLSL version so
 	//  the shader will work on ES, Legacy, and OpenGL 3.2 Core Profile contexts
-	sprintf(sourceString, "#version %d\n%s", version, fragmentSource->string);
-	
+	// sprintf(sourceString, "#version %d\n%s", version, fragmentSource->string);
+    sprintf(sourceString, "%s", fragmentSource->string);
+    
 	GLuint fragShader = glCreateShader(GL_FRAGMENT_SHADER);	
 	glShaderSource(fragShader, 1, (const GLchar **)&(sourceString), NULL);
 	glCompileShader(fragShader);
@@ -822,6 +826,26 @@ static GLsizei GetGLTypeSize(GLenum type)
 	
 	GetGLError();
 	
+    //https://riptutorial.com/opengl/example/28872/using-pbos
+    GLuint pbo;
+    GLuint width = 50, height = 50;
+    glGenBuffers(1, &pbo);
+    glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo);
+    glBufferData(GL_PIXEL_UNPACK_BUFFER, width*height*3, NULL, GL_STREAM_DRAW);
+    void* mappedBuffer = glMapBuffer(GL_PIXEL_UNPACK_BUFFER, GL_WRITE_ONLY);
+    
+    //unsigned char* image = SOIL_load_image("image.png", &width, &height, 0, SOIL_LOAD_RGB);
+    //memcpy(mappedBuffer, image, width*height*3);
+    //SOIL_free_image(image);
+    
+    // after reading is complete back on the main thread
+    glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo);
+    glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+    
+    GLuint sample;
+    glGenSamplers(1, &sample);
+    
 	return prgName;
 	
 }
@@ -852,51 +876,16 @@ static GLsizei GetGLTypeSize(GLenum type)
 		// Load our character model //
 		//////////////////////////////
 		
-		filePathName = [[NSBundle mainBundle] pathForResource:@"demon" ofType:@"model"];
-		_characterModel = mdlLoadModel([filePathName cStringUsingEncoding:NSASCIIStringEncoding]);
-		
-		// Build Vertex Buffer Objects (VBOs) and Vertex Array Object (VAOs) with our model data
-		_characterVAOName = [self buildVAO:_characterModel];
-		
-		// Cache the number of element and primType to use later in our glDrawElements calls
-		_characterNumElements = _characterModel->numElements;
-		_characterPrimType = _characterModel->primType;
-		_characterElementType = _characterModel->elementType;
-
-		if(_useVBOs)
-		{
-			//If we're using VBOs we can destroy all this memory since buffers are
-			// loaded into GL and we've saved anything else we need
-			mdlDestroyModel(_characterModel);
-			_characterModel = NULL;
-		}
-	
-        ////////////////////////////////////
-		// Load texture for our character //
-		////////////////////////////////////
-		
-		filePathName = [[NSBundle mainBundle] pathForResource:@"demon" ofType:@"png"];
-		demoImage *image = imgLoadImage([filePathName cStringUsingEncoding:NSASCIIStringEncoding], false);
-		
-		// Build a texture object with our image data
-		_characterTexName = [self buildTexture:image];
-		
-		// We can destroy the image once it's loaded into GL
-		imgDestroyImage(image);
-	
-		
-		////////////////////////////////////////////////////
-		// Load and Setup shaders for character rendering //
-		////////////////////////////////////////////////////
-		
 		demoSource *vtxSource = NULL;
 		demoSource *frgSource = NULL;
 		
-		filePathName = [[NSBundle mainBundle] pathForResource:@"character" ofType:@"vsh"];
-		vtxSource = srcLoadSource([filePathName cStringUsingEncoding:NSASCIIStringEncoding]);
-		
-		filePathName = [[NSBundle mainBundle] pathForResource:@"character" ofType:@"fsh"];
-		frgSource = srcLoadSource([filePathName cStringUsingEncoding:NSASCIIStringEncoding]);
+        
+        
+        filePathName = [[NSBundle mainBundle] pathForResource:@"vertex" ofType:@"vsh"];
+        vtxSource = srcLoadSource([filePathName cStringUsingEncoding:NSASCIIStringEncoding]);
+        
+        filePathName = [[NSBundle mainBundle] pathForResource:@"fragment" ofType:@"fsh"];
+        frgSource = srcLoadSource([filePathName cStringUsingEncoding:NSASCIIStringEncoding]);
 		
 		// Build Program
 		_characterPrgName = [self buildProgramWithVertexSource:vtxSource
@@ -952,7 +941,6 @@ static GLsizei GetGLTypeSize(GLenum type)
 		glBindFramebuffer(GL_FRAMEBUFFER, _reflectFBOName);
 		
 		GLint iReflectTexName;
-		
 		glGetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
                                               GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME,
                                               &iReflectTexName);
