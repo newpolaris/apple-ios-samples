@@ -83,6 +83,12 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink,
     // Opt-In to Retina resolution
     [self setWantsBestResolutionOpenGLSurface:YES];
 #endif // SUPPORT_RETINA_RESOLUTION
+    
+    [context setView:self];
+    NSOpenGLContext* context2 = [[NSOpenGLContext alloc] initWithFormat:pf shareContext:nil];
+    [self setOpenGLContext:context2];
+    [context2 setView:self];
+    
 }
 
 - (void) prepareOpenGL
