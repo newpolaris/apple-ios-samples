@@ -219,12 +219,12 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink,
 	// When resizing the view, -reshape is called automatically on the main
 	// thread. Add a mutex around to avoid the threads accessing the context
 	// simultaneously when resizing
-	CGLLockContext([[self openGLContext] CGLContextObj]);
+	// CGLLockContext([[self openGLContext] CGLContextObj]);
 
 	[_renderer render];
 
-	CGLFlushDrawable([[self openGLContext] CGLContextObj]);
-	CGLUnlockContext([[self openGLContext] CGLContextObj]);
+	// CGLFlushDrawable([[self openGLContext] CGLContextObj]);
+	// CGLUnlockContext([[self openGLContext] CGLContextObj]);
 }
 
 - (void) dealloc
