@@ -249,6 +249,12 @@ enum {
 	
 	// Update the angle so our character keeps spinning
 	_characterAngle++;
+    
+    GLuint pbo;
+    glGenBuffers(1, &pbo);
+    glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo);
+    glBufferData(GL_PIXEL_UNPACK_BUFFER, 400*400*3, NULL, GL_STREAM_DRAW);
+    
 }
 
 static GLsizei GetGLTypeSize(GLenum type)
